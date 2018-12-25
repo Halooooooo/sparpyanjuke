@@ -2,6 +2,8 @@ import scrapy
 import re
 from scrapy.http import Request
 from pyajks.items import PyajksItem
+import time
+import datetime
 
 class houseSpider(scrapy.Spider):
     name = "anjuke"
@@ -11,17 +13,18 @@ class houseSpider(scrapy.Spider):
     def parse(self, response):
 
         post_nodes = response.xpath('//div[@class="house-title"]').css('a::attr(href)').extract()
-        print ("url"+post_nodes[0])
-        yield Request(url=post_nodes[0],callback=self.parse_detail)
-        # for post_node in post_nodes:
-        #     post_url = post_node
-        #     yield Request(url=post_url,callback=self.parse_detail)
+        # print ("url"+post_nodes[0])
+        # yield Request(url=post_nodes[0],callback=self.parse_detail)
+        for post_node in post_nodes:
+            post_url = post_node
+            time.sleep(2)
+            yield Request(url=post_url,callback=self.parse_detail)
 
         #提取下一页并交给scrapy下载
-        # next_url = response.xpath('//div[@class="multi-page"]').css(".aNxt::attr(href)").extract_first("")
-        # print ("next_url",next_url)
-        # if next_url:
-        #     yield Request(url=next_url,callback=self.parse)
+        next_url = response.xpath('//div[@class="multi-page"]').css(".aNxt::attr(href)").extract_first("")
+        print ("next_url",next_url)
+        if next_url:
+            yield Request(url=next_url,callback=self.parse)
 
     def parse_detail(self,response):
         '''
@@ -44,57 +47,66 @@ class houseSpider(scrapy.Spider):
         house_item["houseNo"] = houseNo
         # 发布时间
         preTime = houseInfo.xpath('//span[@class="house-encode"]/text()').extract_first()
-        time = preTime.split("：",1)[1]
-        print ("time : "+time)
-        house_item["time"] = time
+        times = preTime.split("：",1)[1]
+        print ("time : "+times)
+        house_item["time"] = times
 
-        houseMeta = houseInfo.xpath('//li[@class="houseInfo-detail-item"]')
-        print ("houseMeta"+houseMeta)
+        houseMeta = houseInfo.xpath('//li[@class="houseInfo-detail-item"][2]//div[@class="houseInfo-content"]/text()').extract()
+        print ("-------"+houseMeta[0])
         # 小区
-        preXiaoqu = houseMeta[0].xpath('//div[@class="houseInfo-content"]/a/text()').extract_first()
+        preXiaoqu = houseInfo.xpath('//li[@class="houseInfo-detail-item"][1]').xpath('//div[@class="houseInfo-content"]/a/text()').extract_first()
         print ("小区"+preXiaoqu)
         xiaoqu= preXiaoqu
         house_item["xiaoqu"] = xiaoqu
         # 房屋户型
-        preRoomType = houseMeta[1].xpath('//div[@class="houseInfo-content"]/text()').extract_first("")
-        print ("房屋户型"+preRoomType)
-        roomType= preRoomType.replace("\n","").replace(" ","")
+        preRoomType = houseInfo.xpath('//li[@class="houseInfo-detail-item"][2]//div[@class="houseInfo-content"]/text()').extract_first()
+        preRoomType = preRoomType.replace("\n","")
+        roomType = preRoomType.replace('	','')
         print ("房屋户型:"+roomType)
         house_item["roomType"] = roomType
         # 单价
-        preUnitPrice = houseMeta[2].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        preUnitPrice = houseInfo.xpath('//li[@class="houseInfo-detail-item"][3]//div[@class="houseInfo-content"]/text()').extract_first()
         unitPrice = re.findall("\d+",preUnitPrice)[0]
+        print ("unitPrice:"+unitPrice)
         house_item["unitPrice"] = unitPrice
 
         # 位置
-        preLocation = houseMeta[3].xpath('//div[@class="houseInfo-content"]/p[@class="loc-text"]/text()').extract_first()
+        preLocation = houseInfo.xpath('//li[@class="houseInfo-detail-item"][4]//div[@class="houseInfo-content"]/p[@class="loc-text"]/text()').extract_first()
         location = preLocation
+        print ("location:"+location)
         house_item["location"] = location
         # 房屋面积
-        houseArea = houseMeta[4].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        houseArea = houseInfo.xpath('//li[@class="houseInfo-detail-item"][5]//div[@class="houseInfo-content"]/text()').extract_first()
         house_item["houseArea"] = houseArea
-
+        print (houseArea)
         # 建造年代
-        buildYear = houseMeta[6].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        buildYear = houseInfo.xpath('//li[@class="houseInfo-detail-item"][7]//div[@class="houseInfo-content"]/text()').extract_first()
         house_item["buildYear"] = buildYear
         # 房屋类型
-        houseType = houseMeta[9].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        houseType = houseInfo.xpath('//li[@class="houseInfo-detail-item"][10]//div[@class="houseInfo-content"]/text()').extract_first()
         house_item["houseType"] = houseType
         # 产权年限
-        houseYeatLimit = houseMeta[12].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
-        house_item["houseYeatLimit"] = houseYeatLimit
+        houseYearLimit = houseInfo.xpath('//li[@class="houseInfo-detail-item"][13]//div[@class="houseInfo-content"]/text()').extract_first()
+        house_item["houseYearLimit"] = houseYearLimit
         # 楼层
-        floor = houseMeta[10].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        floor = houseInfo.xpath('//li[@class="houseInfo-detail-item"][11]//div[@class="houseInfo-content"]/text()').extract_first()
         house_item["floor"] = floor
         # 参考首付
-        firstPay = houseMeta[5].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        firstPay = houseInfo.xpath('//li[@class="houseInfo-detail-item"][6]//div[@class="houseInfo-content"]/text()').extract_first()
+        firstPay.replace(" ","").replace("\t","")
         house_item["firstPay"] = firstPay
         # 参考月供
-        MPay = houseMeta[8].xpath('//div[@class="houseInfo-content"]/text()').extract_first()
+        MPay = houseInfo.xpath('//li[@class="houseInfo-detail-item"][9]//div[@class="houseInfo-content"]/span/text()').extract_first()
         house_item["MPay"] = MPay
         # 户型图
         roomTypeImgUrl = scrapy.Field()
+
         # url
-        url = scrapy.Field()
+        house_item["url"] = response.url
+        # nowTime
+        datetime.date.today()
+        nowTime =  int(time.mktime(time.strptime(str(datetime.date.today()), '%Y-%m-%d')))
+        house_item["nowTime"] = nowTime
+
 
         yield house_item

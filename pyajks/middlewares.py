@@ -71,7 +71,7 @@ class PyajksDownloaderMiddleware(object):
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
-        # request.meta['proxy']='http://124.152.85.246:3012'
+        request.meta['proxy']='http://124.152.185.44:2132'
         # Must either:
         # - return None: continue processing this request
         # - or return a Response object

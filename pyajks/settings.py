@@ -48,8 +48,7 @@ DEFAULT_REQUEST_HEADERS = {
     'accept-language': 'zh-CN,zh;q=0.9',
     'Cache-Control': "max-age=0",
     'Connection': 'keep-alive',
-    'cookie':'aQQ_ajkguid=69B62F71-375A-A508-59FE-0F99C0F9494C; 58tj_uuid=9c0a630a-2ffb-4f8a-8f60-5ab0bbeb8299; als=0; sessid=03E0BE49-01D2-DF2F-0A5B-F0767A83E8CA; lps=http%3A%2F%2Fwww.anjuke.com%2F%7C; twe=2; _ga=GA1.2.1097229800.1545307123; wmda_uuid=40dfb4a1793b932235754077de82a99d; wmda_new_uuid=1; wmda_visited_projects=%3B6289197098934; ajk_member_captcha=1183ef14d23a499b27985501748cf2ae; isp=true; Hm_lvt_c5899c8768ebee272710c9c5f365a6d8=1545539405; ctid=23; lp_lt_ut=a74310566e44864fd4006036e8ca8f23; Hm_lpvt_c5899c8768ebee272710c9c5f365a6d8=1545539472; wmda_session_id_6289197098934=1545541833836-650590b5-1a6a-309a; _gid=GA1.2.1071844985.1545541835; init_refer=https%253A%252F%252Fjinan.anjuke.com%252F; new_uv=2; new_session=0; __xsptplusUT_8=1; browse_comm_ids=951802%7C1043629%7C835332%7C1030008%7C1016438; propertys=pd87v4-pk6fnt_pa2b6i-pk6fhk_p9jb7l-pk6djw_p5hv44-pk6bp8_p75z04-pk1eiw_pesh0s-pk1bhj_p7ov9c-pk1bge_p132wo-pk1ao0_; _gat=1; __xsptplus8=8.3.1545541841.1545546976.23%232%7Cwww.baidu.com%7C%7C%7C%7C%23%23neTZvcqffKnXMpH5FOpiRtkPacZBGib1%23'
-}
+    'cookie':'aQQ_ajkguid=69B62F71-375A-A508-59FE-0F99C0F9494C; 58tj_uuid=9c0a630a-2ffb-4f8a-8f60-5ab0bbeb8299; wmda_uuid=c8912ec808f68eef4742d3529173713f; wmda_new_uuid=1; wmda_visited_projects=%3B6289197098934; als=0; sessid=03E0BE49-01D2-DF2F-0A5B-F0767A83E8CA; lps=http%3A%2F%2Fwww.anjuke.com%2F%7C; twe=2; _ga=GA1.2.1097229800.1545307123; ajk_member_captcha=1183ef14d23a499b27985501748cf2ae; isp=true; Hm_lvt_c5899c8768ebee272710c9c5f365a6d8=1545539405; ctid=23; Hm_lpvt_c5899c8768ebee272710c9c5f365a6d8=1545539472; _gid=GA1.2.1071844985.1545541835; propertys=pidr9x-pk8sx9_pcrvh1-pk8pr1_pi3tt9-pk713d_ph1pp7-pk6zxf_pd87v4-pk6fo9_pa2b6i-pk6fhk_p9jb7l-pk6djw_p5hv44-pk6bp8_p75z04-pk1eiw_pesh0s-pk1bhj_p7ov9c-pk1bge_p132wo-pk1ao0_; wmda_session_id_6289197098934=1545661808551-c530eba7-9d58-8e12; __xsptplusUT_8=1; _gat=1; new_session=1; init_refer=https%253A%252F%252Fjinan.anjuke.com%252Fsale%252Flicheng%252Fp5%252F; new_uv=6; __xsptplus8=8.7.1545661809.1545661809.1%232%7Cwww.baidu.com%7C%7C%7C%7C%23%23yTNKBCmtV953Xg3veCz84QsyOe7osxI3%23'}
 #DEFAULT_REQUEST_HEADERS = {
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
@@ -75,9 +74,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'pyajks.pipelines.PyajksPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'pyajks.pipelines.PyajksPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

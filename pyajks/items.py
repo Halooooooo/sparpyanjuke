@@ -20,15 +20,15 @@ class PyajksItem(scrapy.Item):
     # 单价
     unitPrice = scrapy.Field()
     # 小区
-    xiaoqu= scrapy.Field()
+    xiaoqu = scrapy.Field()
     # 位置
-    location= scrapy.Field()
+    location = scrapy.Field()
     # 建造年代
-    buildYear= scrapy.Field()
+    buildYear = scrapy.Field()
     # 房屋类型
     houseType = scrapy.Field()
     # 产权年限
-    houseYeatLimit = scrapy.Field()
+    houseYearLimit = scrapy.Field()
     # 房屋户型
     roomType = scrapy.Field()
     # 房屋面积
@@ -43,4 +43,6 @@ class PyajksItem(scrapy.Item):
     roomTypeImgUrl = scrapy.Field()
     # url
     url = scrapy.Field()
+    # 今天开始的时间戳
+    nowTime = scrapy.Field()
     pass
